@@ -6,6 +6,127 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const parseJSON = (xhr,content) => {
+      // Double check if it updated
+      if(xhr.status == 204){
+        return;
+      }
+      const obj = JSON.parse(xhr.response);
+      console.dir(obj);
+
+      // if message in response, add it to the screen
+      if(obj.message){
+        const p = document.createElement('p');
+        p.textContent = `Message: ${obj.message}`;
+        content.appendChild(p);
+      }
+
+      // if users are in the response, show them
+      if(obj.users) {
+        const userList = document.createElement('p');
+        const users = JSON.stringify(obj.users);
+        userList.textContent = users;
+        content.appendChild(userList);
+      }
+    };
+
+    // handle responses
+    const handleResponse = (xhr, parseResponse) => {
+      const content = document.querySelector('#content');
+
+      // check status codes
+      // need to account for 200, 201, 204, 400, 404
+      switch(xhr.status){
+        case 200: // success
+          content.innerHTML = `<b>Success</b>`;
+          break;
+        case 201: // created
+          content.innerHTML = `<b>Created</b>`;
+          break;  
+        case 204: // updated
+          content.innerHTML = `<b>Updated</b>`;
+          break;
+        case 400: // bad request
+          content.innerHTML = `<b>Bad Request</b>`;
+          break;
+        default: // any other status code // might change
+          content.innerHTML = `Resource Not Found`;
+          break;
+      }
+
+      if(parseResponse){
+        
+        parseJSON(xhr,content);
+      } else {
+        console.log('received');
+      }
+      
+    };
+
+    const sendPost = (e,form) => {
+      // There's prob a better way to handle this
+      // But, it would have to check the form either way
+      // And would need to send different xhr sends 
+      // So I just chunked them both together
+      if(form.id == "userForm"){
+        const url = form.querySelector('#urlField').value;
+        const method = form.querySelector('#methodSelect').value;
+        const xhr = new XMLHttpRequest();
+        xhr.open(method,url);
+        xhr.setRequestHeader('Accept', 'application/json');
+        if(method == 'get'){
+          xhr.onload = () => handleResponse(xhr,true);
+        } else {
+          xhr.onload = () => handleResponse(xhr,false);
+        }
+        xhr.send();
+        
+      } 
+      else // POST
+      {
+        const nameAction = form.getAttribute('action');
+        const nameMethod = form.getAttribute('method');
+
+        // Grab from querySelector
+        const nameField = form.querySelector('#nameField');
+        const ageField = form.querySelector('#ageField');
+
+        // Create ajax request
+        const xhr = new XMLHttpRequest();
+        // set method and url
+        xhr.open(nameMethod, nameAction);
+
+        // set headers
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Accept', 'application/json');
+        
+        xhr.onload = () => handleResponse(xhr,true);
+        // Assign formdata
+        const formData = `name=${nameField.value}&age=${ageField.value}`;
+        
+        xhr.send(formData);
+        
+      }
+      // Prevent page from changing
+      e.preventDefault();
+      return false;
+    };
+    // Set-up
+    const init = () => {
+      // Grab forms
+      const nameForm = document.querySelector('#nameForm');
+      const userForm = document.querySelector('#userForm');
+
+      // Create handlers
+      const addUser = (e) => sendPost(e,nameForm);
+      const getUsers = (e) => sendPost(e,userForm)
+
+      // Attach to events
+      nameForm.addEventListener('submit',addUser);
+      userForm.addEventListener('submit',getUsers);
+    }
+
+    window.onload = init;
 
   </script>
 </head>
@@ -28,7 +149,7 @@
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
-      <input type="submit" value="Get User" />
+      <input type="submit" value="Send" />
     </form>
   </section>
   <section id="content">
