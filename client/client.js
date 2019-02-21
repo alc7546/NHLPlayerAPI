@@ -9,17 +9,12 @@ const parseJSON = (xhr,content) => {
     const obj = JSON.parse(xhr.response);
     console.dir(obj);
 
-    // if message in response, add it to the screen
-    if(obj.message){
-      const p = document.createElement('p');
-      p.textContent = `Message: ${obj.message}`;
-      content.appendChild(p);
-    }
+    
 
     // if users are in the response, show them
-    if(obj.users) {
+    if(obj.data) {
       const userList = document.createElement('p');
-      const users = JSON.stringify(obj.users);
+      const users = JSON.stringify(obj.data.wild);
       userList.textContent = users;
       content.appendChild(userList);
     }
@@ -63,15 +58,15 @@ const parseJSON = (xhr,content) => {
     // But, it would have to check the form either way
     // And would need to send different xhr sends 
     // So I just chunked them both together
-    if(form.id == "userForm"){
-      const url = form.querySelector('#urlField').value;
-      const method = form.querySelector('#methodSelect').value;
+    if(form.id == "teamSelections"){
+      const url = form.getAttribute("action");
+      const method = form.getAttribute("method");
       const xhr = new XMLHttpRequest();
       xhr.open(method,url);
       xhr.setRequestHeader('Accept', 'application/json');
       if(method == 'get'){
         xhr.onload = () => handleResponse(xhr,true);
-      } else {
+      } else { //head request?
         xhr.onload = () => handleResponse(xhr,false);
       }
       xhr.send();
@@ -102,31 +97,6 @@ const parseJSON = (xhr,content) => {
       //Assign data
       const formData = `name=${nameField.value}&position=${positionField.value}&team=${teamField.value}&goals=${goalsField.value}&assists=${assistsField.value}`;
       xhr.send(formData);
-
-
-
-      // HOMEWORK API
-      // const nameAction = form.getAttribute('action');
-      // const nameMethod = form.getAttribute('method');
-
-      // // Grab from querySelector
-      // const nameField = form.querySelector('#nameField');
-      // const ageField = form.querySelector('#ageField');
-
-      // // Create ajax request
-      // const xhr = new XMLHttpRequest();
-      // // set method and url
-      // xhr.open(nameMethod, nameAction);
-
-      // // set headers
-      // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      // xhr.setRequestHeader('Accept', 'application/json');
-      
-      // xhr.onload = () => handleResponse(xhr,true);
-      // // Assign formdata
-      // const formData = `name=${nameField.value}&age=${ageField.value}`;
-      
-      // xhr.send(formData);
       
     }
     // Prevent page from changing
@@ -136,23 +106,18 @@ const parseJSON = (xhr,content) => {
   // Set-up
   const init = () => {
     // Grab forms
-    const nameForm = document.querySelector('#nameForm');
-    const userForm = document.querySelector('#userForm');
     const playerForm = document.querySelector('#playerForm');
     const teamSelections = document.querySelector('#teamSelections');
     
 
     // Create handlers
-    const addUser = (e) => sendPost(e,nameForm);
-    const getUsers = (e) => sendPost(e,userForm);
     const addPlayer = (e) => sendPost(e,playerForm);
     const getTeam = (e) => sendPost(e,teamSelections);
 
     // Attach to events
-    nameForm.addEventListener('submit',addUser);
-    userForm.addEventListener('submit',getUsers);
+    
     playerForm.addEventListener('submit', addPlayer);
-    teamSelections.addEvent('submit', getTeam);
+    teamSelections.addEventListener('submit', getTeam);
   }
 
   window.onload = init;
