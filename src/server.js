@@ -12,7 +12,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // handle POST Requests
 const handlePost = (request, response, parsedUrl) => {
-  if (parsedUrl.pathname === '/addUser') {
+  if (parsedUrl.pathname === '/addPlayer') {
     const res = response;
 
     // upload through byte stream and then reassemble
@@ -40,7 +40,7 @@ const handlePost = (request, response, parsedUrl) => {
       const bodyParams = query.parse(bodyString);
 
       // pass to addUser in jsonHandler
-      jsonHandler.addUser(request, res, bodyParams);
+      jsonHandler.addPlayer(request, res, bodyParams);
     });
   }
 };
@@ -62,10 +62,14 @@ const onRequest = (request, response) => {
       } else if (parsedUrl.pathname === '/style.css') {
         // stylesheet -> send
         htmlHandler.getCSS(request, response);
+      } else if (parsedUrl.pathname === '/bundle.js') {
+        htmlHandler.getBundle(request, response);
       } else if (parsedUrl.pathname === '/getUsers') {
         jsonHandler.getUsers(request, response);
       } else if (parsedUrl.pathname === '/notReal') {
         jsonHandler.notFound(request, response);
+      } else if (parsedUrl.pathname === '/getTeam') {
+        jsonHandler.getTeam(request, response);
       } else {
         jsonHandler.notFound(request, response);
       }

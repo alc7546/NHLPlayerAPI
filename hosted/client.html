@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Our simple HTTP server</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  
+  <script src = "bundle.js"></script>
+  
+</head>
+<body>
+  <section id="top">
+    <h3>Project 1</h3>
+    <div id = "teamSelections" action = "/getTeam" method = "get">
+      <input type ="submit" name="wild" value ="Wild"></button>
+    </div>
+    <form id="nameForm" action="/addUser" method="post">
+      <label for="name">Name: </label>
+      <input id="nameField" type="text" name="name" />
+      <label for="age">Age: </label>
+      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      <input type="submit" value="Add User" />
+    </form>
+    <form id = "playerForm" action = "addPlayer" method = "post">
+      <label for="name">Name: </label>
+      <input id="nameField" type="text" name="name" />
+      <label for="position">Position: </label>
+      <input id="positionField" type="text" name="position">
+      <label for="team">Team: </label>
+      <select id = "teamField">
+        <option value = "wild">Wild</option>
+        <option value = "bruins">Bruins</option>
+      </select>
+      <label for="goals">Goals: </label>
+      <input id="goalsField" type="number" name="goals" min="0" max="200" step="1"/>
+      <label for="assists">Assists: </label>
+      <input id="assistsField" type="number" name="assists" min="0" max="200" step="1"/>
+      <input type="submit" value="Add Player"/>
+    </form>
+    <form id="userForm" action="/getTeam" method="get">
+      <select id='urlField'>
+        <option value='/getTeam'>/getUsers</option>
+        <option value='/notReal'>/notReal</option>
+      </select>
+      <select id="methodSelect">
+        <option value="get">GET</option>
+        <option value="head">HEAD</option>
+      </select>
+      <input type="submit" value="Send" />
+    </form>
+  </section>
+  <section id="content">
+  </section>
+</body>
+</html>
