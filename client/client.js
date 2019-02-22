@@ -1,7 +1,7 @@
 
 
 
-const parseJSON = (xhr,content) => {
+const parseJSON = (xhr,content, selectedTeam) => {
     // Double check if it updated
     if(xhr.status == 204){
       return;
@@ -13,28 +13,63 @@ const parseJSON = (xhr,content) => {
 
     // if users are in the response, show them
     if(obj.data) {
-      const userList = document.createElement('p');
-      const users = JSON.stringify(obj.data.wild);
-      userList.textContent = users;
-      content.appendChild(userList);
+
+      // Delete present content in html - would be 10x better if I used React
+      // For this project but oh well
+      while(content.firstChild){
+        content.removeChild(content.firstChild);
+      }
+      console.log(selectedTeam);
+      // Generate cards for each player in the selected team
+      for(var item in obj.data[selectedTeam]){
+        console.log(item);
+        console.log(obj.data[selectedTeam][item].goals);
+        // Player card and container holding data
+        const card = document.createElement('div');
+        const container = document.createElement('div');
+        card.className = "card";
+        container.className = "container";
+
+        // Name
+        const nameHeader = document.createElement('h4');
+        nameHeader.textContent = `${obj.data[selectedTeam][item].name}`;
+        
+
+        // Position
+        const positionHeader = document.createElement('p');
+        positionHeader.textContent = ` ${obj.data[selectedTeam][item].position}`;
+
+        // Goals
+        const pointsContent = document.createElement('p');
+        pointsContent.textContent = `Goals: ${obj.data[selectedTeam][item].goals} Assists:${obj.data[selectedTeam][item].assists} `;
+       
+        container.append(nameHeader);
+        container.append(positionHeader);
+        container.append(pointsContent);
+        card.append(container);
+        content.append(card);
+      }
+      
+      // userList.textContent = users;
+      // content.appendChild(userList);
     }
   };
 
   // handle responses
-  const handleResponse = (xhr, parseResponse) => {
+  const handleResponse = (xhr, parseResponse, selectedTeam) => {
     const content = document.querySelector('#content');
 
     // check status codes
     // need to account for 200, 201, 204, 400, 404
     switch(xhr.status){
       case 200: // success
-        content.innerHTML = `<b>Success</b>`;
+        //content.innerHTML = `<b>Success</b>`;
         break;
       case 201: // created
-        content.innerHTML = `<b>Created</b>`;
+        //content.innerHTML = `<b>Created</b>`;
         break;  
       case 204: // updated
-        content.innerHTML = `<b>Updated</b>`;
+        //content.innerHTML = `<b>Updated</b>`;
         break;
       case 400: // bad request
         content.innerHTML = `<b>Bad Request</b>`;
@@ -46,7 +81,7 @@ const parseJSON = (xhr,content) => {
 
     if(parseResponse){
       
-      parseJSON(xhr,content);
+      parseJSON(xhr,content, selectedTeam);
     } else {
       console.log('received');
     }
@@ -59,13 +94,15 @@ const parseJSON = (xhr,content) => {
     // And would need to send different xhr sends 
     // So I just chunked them both together
     if(form.id == "teamSelections"){
+      const selectedTeam = form.querySelector("input").value;
+      console.log(selectedTeam);
       const url = form.getAttribute("action");
       const method = form.getAttribute("method");
       const xhr = new XMLHttpRequest();
       xhr.open(method,url);
       xhr.setRequestHeader('Accept', 'application/json');
       if(method == 'get'){
-        xhr.onload = () => handleResponse(xhr,true);
+        xhr.onload = () => handleResponse(xhr,true, selectedTeam);
       } else { //head request?
         xhr.onload = () => handleResponse(xhr,false);
       }

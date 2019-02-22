@@ -24,16 +24,21 @@ const users = {};
 // };
 
 const data = {
-  wild: {
+  Wild: {
     'Jared Spurgeon': {
       name: 'Jared Spurgeon',
       position: 'Forward',
       goals: 5,
-      assists: '1',
+      assists: 1,
     },
   },
-  bruins: {
-
+  Bruins: {
+    'Zdeno Chara': {
+      name: 'Zdeno Chara',
+      position: 'Defense',
+      goals: 3,
+      assists: 19,
+    },
   },
 };
 
@@ -51,6 +56,7 @@ const respondJSONMeta = (request, response, status) => {
 };
 
 // returns full roster of team
+// take a param for team
 const getTeam = (request, response) => {
   const responseJSON = {
     data,

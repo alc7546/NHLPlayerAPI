@@ -9,19 +9,22 @@
 </head>
 <body>
   <section id="top">
-    <h3>Project 1</h3>
+    <h3>Hockey Database Prototype: </h3>
     <form id = "teamSelections" action = "/getTeam" method = "get">
-      <input type ="submit" name ="team" value ="wild"></button>
+      <label for="teams">View Team:</label>
+      <input type ="submit" name ="team" value ="Wild"/>
+      
     </form>
     <form id = "playerForm" action = "addPlayer" method = "post">
+      <label for="add">Add Player:  </label>
       <label for="name">Name: </label>
       <input id="nameField" type="text" name="name" />
       <label for="position">Position: </label>
       <input id="positionField" type="text" name="position">
       <label for="team">Team: </label>
       <select id = "teamField">
-        <option value = "wild">Wild</option>
-        <option value = "bruins">Bruins</option>
+        <option value = "Wild">Wild</option>
+        <option value = "Bruins">Bruins</option>
       </select>
       <label for="goals">Goals: </label>
       <input id="goalsField" type="number" name="goals" min="0" max="200" step="1"/>
@@ -32,5 +35,8 @@
   </section>
   <section id="content">
   </section>
+  <div class = "playerCards">
+
+  </div>
 </body>
 </html>

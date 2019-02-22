@@ -1,6 +1,6 @@
 'use strict';
 
-var parseJSON = function parseJSON(xhr, content) {
+var parseJSON = function parseJSON(xhr, content, selectedTeam) {
   // Double check if it updated
   if (xhr.status == 204) {
     return;
@@ -10,15 +10,49 @@ var parseJSON = function parseJSON(xhr, content) {
 
   // if users are in the response, show them
   if (obj.data) {
-    var userList = document.createElement('p');
-    var users = JSON.stringify(obj.data.wild);
-    userList.textContent = users;
-    content.appendChild(userList);
+
+    // Delete present content in html - would be 10x better if I used React
+    // For this project but oh well
+    while (content.firstChild) {
+      content.removeChild(content.firstChild);
+    }
+    console.log(selectedTeam);
+    // Generate cards for each player in the selected team
+    for (var item in obj.data[selectedTeam]) {
+      console.log(item);
+      console.log(obj.data[selectedTeam][item].goals);
+      // Player card and container holding data
+      var card = document.createElement('div');
+      var container = document.createElement('div');
+      card.className = "card";
+      container.className = "container";
+
+      // Name
+      var nameHeader = document.createElement('h4');
+      nameHeader.textContent = '' + obj.data[selectedTeam][item].name;
+
+      // Position
+      var positionHeader = document.createElement('p');
+      positionHeader.textContent = ' ' + obj.data[selectedTeam][item].position;
+
+      // Goals
+      var pointsContent = document.createElement('p');
+      pointsContent.textContent = 'Goals: ' + obj.data[selectedTeam][item].goals + ' Assists:' + obj.data[selectedTeam][item].assists + ' ';
+
+      container.append(nameHeader);
+      container.append(positionHeader);
+      container.append(pointsContent);
+      card.append(container);
+      content.append(card);
+    }
+
+    // userList.textContent = users;
+    // content.appendChild(userList);
   }
 };
 
 // handle responses
-var handleResponse = function handleResponse(xhr, parseResponse) {
+var handleResponse = function handleResponse(xhr, parseResponse, selectedTeam) {
   var content = document.querySelector('#content');
 
   // check status codes
@@ -26,15 +60,15 @@ var handleResponse = function handleResponse(xhr, parseResponse) {
   switch (xhr.status) {
     case 200:
       // success
-      content.innerHTML = '<b>Success</b>';
+      //content.innerHTML = `<b>Success</b>`;
       break;
     case 201:
       // created
-      content.innerHTML = '<b>Created</b>';
+      //content.innerHTML = `<b>Created</b>`;
       break;
     case 204:
       // updated
-      content.innerHTML = '<b>Updated</b>';
+      //content.innerHTML = `<b>Updated</b>`;
       break;
     case 400:
       // bad request
@@ -48,7 +82,7 @@ var handleResponse = function handleResponse(xhr, parseResponse) {
 
   if (parseResponse) {
 
-    parseJSON(xhr, content);
+    parseJSON(xhr, content, selectedTeam);
   } else {
     console.log('received');
   }
@@ -60,6 +94,8 @@ var sendPost = function sendPost(e, form) {
   // And would need to send different xhr sends 
   // So I just chunked them both together
   if (form.id == "teamSelections") {
+    var selectedTeam = form.querySelector("input").value;
+    console.log(selectedTeam);
     var url = form.getAttribute("action");
     var method = form.getAttribute("method");
     var xhr = new XMLHttpRequest();
@@ -67,7 +103,7 @@ var sendPost = function sendPost(e, form) {
     xhr.setRequestHeader('Accept', 'application/json');
     if (method == 'get') {
       xhr.onload = function () {
-        return handleResponse(xhr, true);
+        return handleResponse(xhr, true, selectedTeam);
       };
     } else {
       //head request?
