@@ -18,9 +18,9 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
     }
     console.log(selectedTeam);
     // Generate cards for each player in the selected team
-    for (var item in obj.data[selectedTeam]) {
+    for (var item in obj.data.team[selectedTeam]) {
       console.log(item);
-      console.log(obj.data[selectedTeam][item].goals);
+      console.log(obj.data.team[selectedTeam][item].goals);
       // Player card and container holding data
       var card = document.createElement('div');
       var container = document.createElement('div');
@@ -29,17 +29,22 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
 
       // Name
       var nameHeader = document.createElement('h4');
-      nameHeader.textContent = '' + obj.data[selectedTeam][item].name;
+      nameHeader.textContent = '' + obj.data.team[selectedTeam][item].name;
 
       // Position
       var positionHeader = document.createElement('p');
-      positionHeader.textContent = ' ' + obj.data[selectedTeam][item].position;
+      positionHeader.textContent = ' ' + obj.data.team[selectedTeam][item].position;
+
+      var image = document.createElement('img');
+      image.src = obj.data.team[selectedTeam][item].img;
 
       // Goals
       var pointsContent = document.createElement('p');
-      pointsContent.textContent = 'Goals: ' + obj.data[selectedTeam][item].goals + ' Assists:' + obj.data[selectedTeam][item].assists + ' ';
+      pointsContent.textContent = 'Goals: ' + obj.data.team[selectedTeam][item].goals + ' Assists:' + obj.data.team[selectedTeam][item].assists + ' ';
 
       container.append(nameHeader);
+      container.append(image);
+      console.log("yeet");
       container.append(positionHeader);
       container.append(pointsContent);
       card.append(container);
@@ -94,7 +99,7 @@ var sendPost = function sendPost(e, form) {
   // And would need to send different xhr sends 
   // So I just chunked them both together
   if (form.id == "teamSelections") {
-    var selectedTeam = form.querySelector("input").value;
+    var selectedTeam = form.querySelector("#teamSelect").value;
     console.log(selectedTeam);
     var url = form.getAttribute("action");
     var method = form.getAttribute("method");
@@ -124,6 +129,7 @@ var sendPost = function sendPost(e, form) {
       var teamField = form.querySelector('#teamField');
       var goalsField = form.querySelector('#goalsField');
       var assistsField = form.querySelector('#assistsField');
+      var imgField = form.querySelector('#imgField');
 
       // Create ajax request
       var _xhr = new XMLHttpRequest();
@@ -137,7 +143,7 @@ var sendPost = function sendPost(e, form) {
       };
 
       //Assign data
-      var formData = 'name=' + nameField.value + '&position=' + positionField.value + '&team=' + teamField.value + '&goals=' + goalsField.value + '&assists=' + assistsField.value;
+      var formData = 'name=' + nameField.value + '&position=' + positionField.value + '&team=' + teamField.value + '&goals=' + goalsField.value + '&assists=' + assistsField.value + '&img=' + imgField.value;
       _xhr.send(formData);
     }
   // Prevent page from changing

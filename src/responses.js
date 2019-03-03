@@ -23,24 +23,25 @@ const users = {};
 
 // };
 
-const data = {
-  Wild: {
-    'Jared Spurgeon': {
-      name: 'Jared Spurgeon',
-      position: 'Forward',
-      goals: 5,
-      assists: 1,
-    },
-  },
-  Bruins: {
-    'Zdeno Chara': {
-      name: 'Zdeno Chara',
-      position: 'Defense',
-      goals: 3,
-      assists: 19,
-    },
-  },
-};
+const data = require('./teamData.js')
+// const data = {
+//   Wild: {
+//     'Jared Spurgeon': {
+//       name: 'Jared Spurgeon',
+//       position: 'Forward',
+//       goals: 5,
+//       assists: 1,
+//     },
+//   },
+//   Bruins: {
+//     'Zdeno Chara': {
+//       name: 'Zdeno Chara',
+//       position: 'Defense',
+//       goals: 3,
+//       assists: 19,
+//     },
+//   },
+// };
 
 // function to respond with a json object
 const respondJSON = (request, response, status, object) => {
@@ -56,11 +57,20 @@ const respondJSONMeta = (request, response, status) => {
 };
 
 // returns full roster of team
-// take a param for team
-const getTeam = (request, response) => {
+// TODO - TAKE A PARAM FOR THE TEAM INSTEAD OF RETURNING THEM ALL
+const getTeam = (request, response, params) => {
+  
   const responseJSON = {
-    data,
+    data
   };
+
+  if(params.team && data.team[params.team]){
+    responseJSON.data = data.team[params.team];
+    console.log(params.team);
+    console.log(data.team[params.team]);
+  }
+
+  
   respondJSON(request, response, 200, responseJSON);
 };
 
@@ -82,10 +92,11 @@ const addPlayer = (request, response, body) => {
   };
   console.log(body.name);
   console.log(body.position);
-  console.log(body.team);
+  
   console.log(body.goals);
   console.log(body.assists);
-  if (!body.name || !body.position || !body.goals || !body.assists || !body.team) {
+  console.log(body.img);
+  if (!body.name || !body.position || !body.goals || !body.assists || !body.img) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
@@ -93,21 +104,23 @@ const addPlayer = (request, response, body) => {
   // Set code to created if params exist
   let responseCode = 201;
 
-  if (data[body.team][body.name]) {
+  if (data.team[body.team][body.name]) {
     responseCode = 204;
   } else {
-    data[body.team][body.name] = {};
+    data.team[body.team][body.name] = {};
   }
 
   // add/update the fields
-  data[body.team][body.name].name = body.name;
-  data[body.team][body.name].position = body.position;
-  data[body.team][body.name].goals = body.goals;
-  data[body.team][body.name].assists = body.assists;
+  data.team[body.team][body.name].name = body.name;
+  data.team[body.team][body.name].position = body.position;
+  data.team[body.team][body.name].goals = body.goals;
+  data.team[body.team][body.name].assists = body.assists;
+  data.team[body.team][body.name].img = body.img;
+  
   // data[body.name].skaters[body.name].name = body.name;
   // data[body.name].skaters[body.name].position = body.position;
   // data[body.name].skaters[body.name].goals = body.goals;
-  // data[body.name].skaters[body.name].assists = body.assists;
+  // data[body.name].skaters[body.name].assists = body.assists; 
 
   // Set created message w/ JSON
   if (responseCode === 201) {

@@ -12,7 +12,15 @@
     <h3>Hockey Database Prototype: </h3>
     <form id = "teamSelections" action = "/getTeam" method = "get">
       <label for="teams">View Team:</label>
-      <input type ="submit" name ="team" value ="Wild"/>
+      <select id ="teamSelect">
+        <option value="tampa">Tampa Bay</option>
+        <option value="bruins">Boston Bruins</option>
+        <option value="flames">Calgary Flames</option>
+        <option value="toronto">Maple Leafs</option>
+        <option value="sharks">San Jose Sharks</option>
+
+      </select>
+      <input type ="submit" value ="Send"/>
       
     </form>
     <form id = "playerForm" action = "addPlayer" method = "post">
@@ -30,6 +38,8 @@
       <input id="goalsField" type="number" name="goals" min="0" max="200" step="1"/>
       <label for="assists">Assists: </label>
       <input id="assistsField" type="number" name="assists" min="0" max="200" step="1"/>
+      <label for="img">Image Link: </label>
+      <input id="imgField" type="text" name="img">
       <input type="submit" value="Add Player"/>
     </form>
   </section>

@@ -21,9 +21,9 @@ const parseJSON = (xhr,content, selectedTeam) => {
       }
       console.log(selectedTeam);
       // Generate cards for each player in the selected team
-      for(var item in obj.data[selectedTeam]){
+      for(var item in obj.data.team[selectedTeam]){
         console.log(item);
-        console.log(obj.data[selectedTeam][item].goals);
+        console.log(obj.data.team[selectedTeam][item].goals);
         // Player card and container holding data
         const card = document.createElement('div');
         const container = document.createElement('div');
@@ -32,18 +32,23 @@ const parseJSON = (xhr,content, selectedTeam) => {
 
         // Name
         const nameHeader = document.createElement('h4');
-        nameHeader.textContent = `${obj.data[selectedTeam][item].name}`;
+        nameHeader.textContent = `${obj.data.team[selectedTeam][item].name}`;
         
 
         // Position
         const positionHeader = document.createElement('p');
-        positionHeader.textContent = ` ${obj.data[selectedTeam][item].position}`;
+        positionHeader.textContent = ` ${obj.data.team[selectedTeam][item].position}`;
 
+        const image = document.createElement('img');
+        image.src = obj.data.team[selectedTeam][item].img;
+        
         // Goals
         const pointsContent = document.createElement('p');
-        pointsContent.textContent = `Goals: ${obj.data[selectedTeam][item].goals} Assists:${obj.data[selectedTeam][item].assists} `;
+        pointsContent.textContent = `Goals: ${obj.data.team[selectedTeam][item].goals} Assists:${obj.data.team[selectedTeam][item].assists} `;
        
         container.append(nameHeader);
+        container.append(image);
+        console.log("yeet");
         container.append(positionHeader);
         container.append(pointsContent);
         card.append(container);
@@ -94,7 +99,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
     // And would need to send different xhr sends 
     // So I just chunked them both together
     if(form.id == "teamSelections"){
-      const selectedTeam = form.querySelector("input").value;
+      const selectedTeam = form.querySelector("#teamSelect").value;
       console.log(selectedTeam);
       const url = form.getAttribute("action");
       const method = form.getAttribute("method");
@@ -121,6 +126,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
       const teamField = form.querySelector('#teamField');
       const goalsField = form.querySelector('#goalsField');
       const assistsField = form.querySelector('#assistsField');
+      const imgField = form.querySelector('#imgField');
 
       // Create ajax request
       const xhr = new XMLHttpRequest();
@@ -128,11 +134,12 @@ const parseJSON = (xhr,content, selectedTeam) => {
 
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xhr.setRequestHeader('Accept', 'application/json');
+  
 
       xhr.onload = () => handleResponse(xhr,true);
 
       //Assign data
-      const formData = `name=${nameField.value}&position=${positionField.value}&team=${teamField.value}&goals=${goalsField.value}&assists=${assistsField.value}`;
+      const formData = `name=${nameField.value}&position=${positionField.value}&team=${teamField.value}&goals=${goalsField.value}&assists=${assistsField.value}&img=${imgField.value}`;
       xhr.send(formData);
       
     }

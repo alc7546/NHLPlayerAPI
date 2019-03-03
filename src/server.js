@@ -48,7 +48,8 @@ const handlePost = (request, response, parsedUrl) => {
 
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
-
+  const params = query.parse(parsedUrl.query);
+  console.log(params);
   // Switch case here, determine between different request methods
 
   switch (request.method) {
@@ -64,12 +65,8 @@ const onRequest = (request, response) => {
         htmlHandler.getCSS(request, response);
       } else if (parsedUrl.pathname === '/bundle.js') {
         htmlHandler.getBundle(request, response);
-      } else if (parsedUrl.pathname === '/getUsers') {
-        jsonHandler.getUsers(request, response);
-      } else if (parsedUrl.pathname === '/notReal') {
-        jsonHandler.notFound(request, response);
       } else if (parsedUrl.pathname === '/getTeam') {
-        jsonHandler.getTeam(request, response);
+        jsonHandler.getTeam(request, response, params);
       } else {
         jsonHandler.notFound(request, response);
       }
