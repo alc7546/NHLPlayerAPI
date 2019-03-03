@@ -27,7 +27,7 @@ const getTeam = (request, response, params) => {
 };
 
 // Set up for HEAD but not entirely sure when it would ever actually be used in this project?
-const getTeamMeta = (request,response) => respondJSONMeta(request,response,200);
+const getTeamMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 // Add player w/ params
 const addPlayer = (request, response, body) => {

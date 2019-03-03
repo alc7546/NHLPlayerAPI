@@ -95,7 +95,7 @@ const team = {
       name: 'Steven Stamkos',
       position: 'Forward',
       goals: 33,
-      assists:44,
+      assists: 44,
       img: 'https://nhl.bamcontent.com/images/headshots/current/168x168/8474564.jpg',
     },
     'Erik Cernak': {
@@ -205,8 +205,8 @@ const team = {
       assists: 46,
       img: 'https://nhl.bamcontent.com/images/headshots/current/168x168/8477496.jpg',
     },
-    'Andrew Mangiapane': {
-      name: 'Andrew Mangiapane',
+    'Andrew M.': {
+      name: 'Andrew M.',
       position: 'Forward',
       goals: 3,
       assists: 2,

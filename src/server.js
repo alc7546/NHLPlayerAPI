@@ -39,9 +39,8 @@ const handlePost = (request, response, parsedUrl) => {
       // parse with query
       const bodyParams = query.parse(bodyString);
 
-      // pass to addUser in jsonHandler 
+      // pass to addUser in jsonHandler
       jsonHandler.addPlayer(request, res, bodyParams);
-
     });
   }
 };

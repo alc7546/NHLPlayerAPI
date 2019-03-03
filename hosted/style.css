@@ -1,22 +1,51 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto');
 html, body {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
+  
 }
 
 #top {
   text-align: center;
-  margin: 0 auto;
+  margin: 0;
+  background-color: rgb(156, 209, 240);
+  font-size: 1.1em;
 }
 
-#top h1 {
-  font-size: 2em;
-}
-
-#content {
-  margin-top: 100px;
+#top h3 {
   font-size: 1.5em;
+  margin-top: 0;
+}
+
+#top #teamSelections{
+  margin-bottom: 1.3em;
+}
+
+#top #playerForm{
+  padding-bottom: 0.5em;
+}
+
+
+input[type=submit]{
+  background: white;
+  color: black;
+  border-radius: 5px;
+  border: 1px solid black;
+  
+}
+
+label{
+  padding-left: 10px;
+}
+#content {
+  display: flex;
+  flex-wrap:wrap;
+  margin-top: 1%;
+  margin-left: 5%;
+  
+  font-size: 1.25em;
   text-align: left;
 }
 
@@ -25,13 +54,41 @@ html, body {
   transition: 0.3s;
   display: inline-block;
   text-align: center;
-  margin: 0px 10px 10px 0px;
+  margin: 0px 0px 20px 20px;
+  border-radius: 10px;
 }
 
 .card:hover{
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-.container{
-  padding: 2px 16px;
+.container {
+  border-radius: 10px;
+}
+.tampa{
+  border: 2px solid#99ccff;
+}
+
+.bruins{
+  border: 2px solid rgba(226, 195, 18, 0.815);
+}
+
+.flames{
+  border: 2px solid rgba(243, 113, 113, 0.733);
+}
+
+.container p{
+  padding:0;
+  margin:2px;
+}
+
+.container h4{
+  padding:0;
+  margin-top:1px;
+  margin-bottom:1px;
+}
+
+.container img{
+  height: 168px;
+  width: 168px;
 }

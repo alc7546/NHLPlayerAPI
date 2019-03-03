@@ -5,10 +5,6 @@ const parseJSON = (xhr,content, selectedTeam) => {
       return;
     }
     const obj = JSON.parse(xhr.response);
-    console.dir(obj);
-
-    
-
     // if users are in the response, show them
     if(obj.data) {
 
@@ -24,6 +20,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
         const container = document.createElement('div');
         card.className = "card";
         container.className = "container";
+        card.classList.add(selectedTeam);
 
         // Name
         const nameHeader = document.createElement('h4');
@@ -45,7 +42,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
         // Hookup
         container.append(nameHeader);
         container.append(image);
-        console.log("yeet");
+        
         container.append(positionHeader);
         container.append(pointsContent);
         card.append(container);
@@ -91,7 +88,6 @@ const parseJSON = (xhr,content, selectedTeam) => {
     // Handle the GET
     if(form.id == "teamSelections"){
       const selectedTeam = form.querySelector("#teamSelect").value;
-      console.log(selectedTeam);
       const url = form.getAttribute("action");
       const method = form.getAttribute("method");
       const xhr = new XMLHttpRequest();
@@ -126,7 +122,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xhr.setRequestHeader('Accept', 'application/json');
   
-      
+
       xhr.onload = () => handleResponse(xhr,true, teamField);
 
       //Assign data

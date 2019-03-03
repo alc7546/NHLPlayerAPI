@@ -6,8 +6,6 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
     return;
   }
   var obj = JSON.parse(xhr.response);
-  console.dir(obj);
-
   // if users are in the response, show them
   if (obj.data) {
 
@@ -23,6 +21,7 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
       var container = document.createElement('div');
       card.className = "card";
       container.className = "container";
+      card.classList.add(selectedTeam);
 
       // Name
       var nameHeader = document.createElement('h4');
@@ -43,7 +42,7 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
       // Hookup
       container.append(nameHeader);
       container.append(image);
-      console.log("yeet");
+
       container.append(positionHeader);
       container.append(pointsContent);
       card.append(container);
@@ -93,7 +92,6 @@ var sendAjax = function sendAjax(e, form) {
   // Handle the GET
   if (form.id == "teamSelections") {
     var selectedTeam = form.querySelector("#teamSelect").value;
-    console.log(selectedTeam);
     var url = form.getAttribute("action");
     var method = form.getAttribute("method");
     var xhr = new XMLHttpRequest();
