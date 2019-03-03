@@ -1,6 +1,4 @@
 
-
-
 const parseJSON = (xhr,content, selectedTeam) => {
     // Double check if it updated
     if(xhr.status == 204){
@@ -14,16 +12,13 @@ const parseJSON = (xhr,content, selectedTeam) => {
     // if users are in the response, show them
     if(obj.data) {
 
-      // Delete present content in html - would be 10x better if I used React
-      // For this project but oh well
+      // Delete present content in html
       while(content.firstChild){
         content.removeChild(content.firstChild);
       }
-      console.log(selectedTeam);
       // Generate cards for each player in the selected team
       for(var item in obj.data.team[selectedTeam]){
-        console.log(item);
-        console.log(obj.data.team[selectedTeam][item].goals);
+
         // Player card and container holding data
         const card = document.createElement('div');
         const container = document.createElement('div');
@@ -39,6 +34,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
         const positionHeader = document.createElement('p');
         positionHeader.textContent = ` ${obj.data.team[selectedTeam][item].position}`;
 
+        // Image
         const image = document.createElement('img');
         image.src = obj.data.team[selectedTeam][item].img;
         
@@ -46,6 +42,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
         const pointsContent = document.createElement('p');
         pointsContent.textContent = `Goals: ${obj.data.team[selectedTeam][item].goals} Assists:${obj.data.team[selectedTeam][item].assists} `;
        
+        // Hookup
         container.append(nameHeader);
         container.append(image);
         console.log("yeet");
@@ -54,9 +51,6 @@ const parseJSON = (xhr,content, selectedTeam) => {
         card.append(container);
         content.append(card);
       }
-      
-      // userList.textContent = users;
-      // content.appendChild(userList);
     }
   };
 
@@ -66,6 +60,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
 
     // check status codes
     // need to account for 200, 201, 204, 400, 404
+    // displaying to console for most
     switch(xhr.status){
       case 200: // success
         console.dir(xhr.status);
@@ -84,20 +79,16 @@ const parseJSON = (xhr,content, selectedTeam) => {
         break;
     }
 
+    // Only parse response on get requests 
+    // Can prob always do this?
     if(parseResponse){
-      
       parseJSON(xhr,content, selectedTeam);
-    } else {
-      console.log('received');
-    }
+    } 
     
   };
 
-  const sendPost = (e,form) => {
-    // There's prob a better way to handle this
-    // But, it would have to check the form either way
-    // And would need to send different xhr sends 
-    // So I just chunked them both together
+  const sendAjax = (e,form) => {
+    // Handle the GET
     if(form.id == "teamSelections"){
       const selectedTeam = form.querySelector("#teamSelect").value;
       console.log(selectedTeam);
@@ -108,7 +99,7 @@ const parseJSON = (xhr,content, selectedTeam) => {
       xhr.setRequestHeader('Accept', 'application/json');
       if(method == 'get'){
         xhr.onload = () => handleResponse(xhr,true, selectedTeam);
-      } else { //head request?
+      } else { //head request no body responses
         xhr.onload = () => handleResponse(xhr,false);
       }
       xhr.send();
@@ -135,8 +126,8 @@ const parseJSON = (xhr,content, selectedTeam) => {
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xhr.setRequestHeader('Accept', 'application/json');
   
-
-      xhr.onload = () => handleResponse(xhr,true);
+      
+      xhr.onload = () => handleResponse(xhr,true, teamField);
 
       //Assign data
       const formData = `name=${nameField.value}&position=${positionField.value}&team=${teamField.value}&goals=${goalsField.value}&assists=${assistsField.value}&img=${imgField.value}`;
@@ -155,8 +146,8 @@ const parseJSON = (xhr,content, selectedTeam) => {
     
 
     // Create handlers
-    const addPlayer = (e) => sendPost(e,playerForm);
-    const getTeam = (e) => sendPost(e,teamSelections);
+    const addPlayer = (e) => sendAjax(e,playerForm);
+    const getTeam = (e) => sendAjax(e,teamSelections);
 
     // Attach to events
     

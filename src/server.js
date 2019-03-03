@@ -39,8 +39,9 @@ const handlePost = (request, response, parsedUrl) => {
       // parse with query
       const bodyParams = query.parse(bodyString);
 
-      // pass to addUser in jsonHandler
+      // pass to addUser in jsonHandler 
       jsonHandler.addPlayer(request, res, bodyParams);
+
     });
   }
 };
@@ -49,9 +50,8 @@ const handlePost = (request, response, parsedUrl) => {
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
-  console.log(params);
-  // Switch case here, determine between different request methods
 
+  // Switch case here, determine between different request methods
   switch (request.method) {
     case 'POST':
       handlePost(request, response, parsedUrl);
@@ -71,17 +71,15 @@ const onRequest = (request, response) => {
         jsonHandler.notFound(request, response);
       }
       break;
-    case 'HEAD':
-      if (parsedUrl.pathname === '/getUsers') {
-        jsonHandler.getUsersMeta(request, response);
-      } else if (parsedUrl.pathname === '/notReal') {
-        jsonHandler.notFoundMeta(request, response);
-      } else {
-        jsonHandler.notFoundMeta(request, response);
-      }
-      // Could just be an else statement,
-      // but making sure /notReal is explicitly stated in switch statement
-      break;
+    // case 'HEAD':
+    //   if (parsedUrl.pathname === '/getUsers') {
+    //     jsonHandler.getUsersMeta(request, response);
+    //   } else if (parsedUrl.pathname === '/notReal') {
+    //     jsonHandler.notFoundMeta(request, response);
+    //   } else {
+    //     jsonHandler.notFoundMeta(request, response);
+    //   }
+    //   break;
     default:
       // send 404
       jsonHandler.notFound(request, response);

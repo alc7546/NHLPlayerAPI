@@ -11,16 +11,13 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
   // if users are in the response, show them
   if (obj.data) {
 
-    // Delete present content in html - would be 10x better if I used React
-    // For this project but oh well
+    // Delete present content in html
     while (content.firstChild) {
       content.removeChild(content.firstChild);
     }
-    console.log(selectedTeam);
     // Generate cards for each player in the selected team
     for (var item in obj.data.team[selectedTeam]) {
-      console.log(item);
-      console.log(obj.data.team[selectedTeam][item].goals);
+
       // Player card and container holding data
       var card = document.createElement('div');
       var container = document.createElement('div');
@@ -35,6 +32,7 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
       var positionHeader = document.createElement('p');
       positionHeader.textContent = ' ' + obj.data.team[selectedTeam][item].position;
 
+      // Image
       var image = document.createElement('img');
       image.src = obj.data.team[selectedTeam][item].img;
 
@@ -42,6 +40,7 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
       var pointsContent = document.createElement('p');
       pointsContent.textContent = 'Goals: ' + obj.data.team[selectedTeam][item].goals + ' Assists:' + obj.data.team[selectedTeam][item].assists + ' ';
 
+      // Hookup
       container.append(nameHeader);
       container.append(image);
       console.log("yeet");
@@ -50,9 +49,6 @@ var parseJSON = function parseJSON(xhr, content, selectedTeam) {
       card.append(container);
       content.append(card);
     }
-
-    // userList.textContent = users;
-    // content.appendChild(userList);
   }
 };
 
@@ -62,42 +58,39 @@ var handleResponse = function handleResponse(xhr, parseResponse, selectedTeam) {
 
   // check status codes
   // need to account for 200, 201, 204, 400, 404
+  // displaying to console for most
   switch (xhr.status) {
     case 200:
       // success
-      //content.innerHTML = `<b>Success</b>`;
+      console.dir(xhr.status);
       break;
     case 201:
       // created
-      //content.innerHTML = `<b>Created</b>`;
+      console.dir(xhr.status);
       break;
     case 204:
       // updated
-      //content.innerHTML = `<b>Updated</b>`;
+      console.dir(xhr.status);
       break;
     case 400:
       // bad request
-      content.innerHTML = '<b>Bad Request</b>';
+      console.dir(xhr.status);
       break;
     default:
       // any other status code // might change
-      content.innerHTML = 'Resource Not Found';
+      console.dir(xhr.status);
       break;
   }
 
+  // Only parse response on get requests 
+  // Can prob always do this?
   if (parseResponse) {
-
     parseJSON(xhr, content, selectedTeam);
-  } else {
-    console.log('received');
   }
 };
 
-var sendPost = function sendPost(e, form) {
-  // There's prob a better way to handle this
-  // But, it would have to check the form either way
-  // And would need to send different xhr sends 
-  // So I just chunked them both together
+var sendAjax = function sendAjax(e, form) {
+  // Handle the GET
   if (form.id == "teamSelections") {
     var selectedTeam = form.querySelector("#teamSelect").value;
     console.log(selectedTeam);
@@ -111,7 +104,7 @@ var sendPost = function sendPost(e, form) {
         return handleResponse(xhr, true, selectedTeam);
       };
     } else {
-      //head request?
+      //head request no body responses
       xhr.onload = function () {
         return handleResponse(xhr, false);
       };
@@ -139,7 +132,7 @@ var sendPost = function sendPost(e, form) {
       _xhr.setRequestHeader('Accept', 'application/json');
 
       _xhr.onload = function () {
-        return handleResponse(_xhr, true);
+        return handleResponse(_xhr, true, teamField);
       };
 
       //Assign data
@@ -158,10 +151,10 @@ var init = function init() {
 
   // Create handlers
   var addPlayer = function addPlayer(e) {
-    return sendPost(e, playerForm);
+    return sendAjax(e, playerForm);
   };
   var getTeam = function getTeam(e) {
-    return sendPost(e, teamSelections);
+    return sendAjax(e, teamSelections);
   };
 
   // Attach to events
