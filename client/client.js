@@ -68,19 +68,19 @@ const parseJSON = (xhr,content, selectedTeam) => {
     // need to account for 200, 201, 204, 400, 404
     switch(xhr.status){
       case 200: // success
-        //content.innerHTML = `<b>Success</b>`;
+        console.dir(xhr.status);
         break;
       case 201: // created
-        //content.innerHTML = `<b>Created</b>`;
+        console.dir(xhr.status);
         break;  
       case 204: // updated
-        //content.innerHTML = `<b>Updated</b>`;
+        console.dir(xhr.status);
         break;
       case 400: // bad request
-        content.innerHTML = `<b>Bad Request</b>`;
+        console.dir(xhr.status);
         break;
       default: // any other status code // might change
-        content.innerHTML = `Resource Not Found`;
+        console.dir(xhr.status);
         break;
     }
 

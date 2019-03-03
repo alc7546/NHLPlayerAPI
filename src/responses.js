@@ -23,7 +23,7 @@ const users = {};
 
 // };
 
-const data = require('./teamData.js')
+const data = require('./teamData.js');
 // const data = {
 //   Wild: {
 //     'Jared Spurgeon': {
@@ -59,21 +59,22 @@ const respondJSONMeta = (request, response, status) => {
 // returns full roster of team
 // TODO - TAKE A PARAM FOR THE TEAM INSTEAD OF RETURNING THEM ALL
 const getTeam = (request, response, params) => {
-  
   const responseJSON = {
-    data
+    data,
   };
 
-  if(params.team && data.team[params.team]){
+  if (params.team && data.team[params.team]) {
     responseJSON.data = data.team[params.team];
     console.log(params.team);
     console.log(data.team[params.team]);
   }
 
-  
+
   respondJSON(request, response, 200, responseJSON);
 };
 
+// Set up for HEAD but not entirely sure when it would ever actually be used in this project?
+const getTeamMeta = (request,response) => respondJSONMeta(request,response,200);
 
 // return user objects as JSON
 const getUsers = (request, response) => {
@@ -92,7 +93,7 @@ const addPlayer = (request, response, body) => {
   };
   console.log(body.name);
   console.log(body.position);
-  
+
   console.log(body.goals);
   console.log(body.assists);
   console.log(body.img);
@@ -116,11 +117,11 @@ const addPlayer = (request, response, body) => {
   data.team[body.team][body.name].goals = body.goals;
   data.team[body.team][body.name].assists = body.assists;
   data.team[body.team][body.name].img = body.img;
-  
+
   // data[body.name].skaters[body.name].name = body.name;
   // data[body.name].skaters[body.name].position = body.position;
   // data[body.name].skaters[body.name].goals = body.goals;
-  // data[body.name].skaters[body.name].assists = body.assists; 
+  // data[body.name].skaters[body.name].assists = body.assists;
 
   // Set created message w/ JSON
   if (responseCode === 201) {
@@ -210,5 +211,6 @@ module.exports = {
   notFound,
   notFoundMeta,
   getTeam,
+  getTeamMeta,
   addPlayer,
 };
